@@ -72,12 +72,14 @@ class MainActivity : AppCompatActivity() {
 
             val txtNome = item.findViewById<TextView>(R.id.txtNome)
             val txtRaio = item.findViewById<TextView>(R.id.txtRaio)
+            val txtHorario = item.findViewById<TextView>(R.id.txtHorario)
             val switchAtivo = item.findViewById<Switch>(R.id.switchAtivo)
             val btnExcluir = item.findViewById<TextView>(R.id.btnExcluir)
             val areaClicavel = item.findViewById<LinearLayout>(R.id.areaClicavel)
 
             txtNome.text = alarme.nome
             txtRaio.text = "Raio de ${alarme.raioMetros.toInt()} metros"
+            txtHorario.text = "${alarme.modoLabel()} · ${alarme.horarioFormatado()}"
             switchAtivo.isChecked = alarme.ativo
 
             switchAtivo.setOnCheckedChangeListener { _, isChecked ->
@@ -118,10 +120,6 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED
         ) {
-            // No Android 10+, essa permissão precisa ser pedida numa etapa
-            // separada da localização "normal" — o próprio sistema cuida de
-            // mostrar a tela certa (às vezes um diálogo, às vezes direto nas
-            // configurações do app, dependendo da versão do Android).
             pedirLocalizacaoSegundoPlanoLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
         } else {
             continuarFluxoDePermissoes()
@@ -136,22 +134,19 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        pedirAlarmeExato()
+        // Não pede mais permissão de alarme exato: esse app não usa
+        // AlarmManager/horário agendado, só geofencing (localização) — a
+        // permissão nunca era necessária aqui, foi removida.
         pedirPermissaoTelaCheia()
-        solicitarIgnorarOtimizacaoBateria()
         AutoStartHelper.tentarAbrirUmaVez(this)
-        AutoStartHelper.tentarAbrirEconomiaBateriaMiui(this)
-    }
 
-    private fun pedirAlarmeExato() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val alarmManager = getSystemService(ALARM_SERVICE) as android.app.AlarmManager
-            if (!alarmManager.canScheduleExactAlarms()) {
-                try {
-                    startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
-                } catch (e: Exception) {
-                }
-            }
+        // Evita pedir bateria duas vezes: tenta primeiro a tela específica
+        // do MIUI; só pede a permissão padrão do Android como alternativa
+        // se o aparelho não for Xiaomi (senão o usuário veria duas telas
+        // de bateria seguidas).
+        val abriuTelaMiui = AutoStartHelper.tentarAbrirEconomiaBateriaMiui(this)
+        if (!abriuTelaMiui) {
+            solicitarIgnorarOtimizacaoBateria()
         }
     }
 

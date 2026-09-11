@@ -22,7 +22,12 @@ object LocationAlarmStorage {
                     latitude = obj.getDouble("latitude"),
                     longitude = obj.getDouble("longitude"),
                     raioMetros = obj.getDouble("raioMetros").toFloat(),
-                    ativo = obj.getBoolean("ativo")
+                    ativo = obj.getBoolean("ativo"),
+                    modo = obj.optString("modo", LocationAlarme.MODO_TODOS_OS_DIAS),
+                    horaInicio = obj.optInt("horaInicio", 0),
+                    minutoInicio = obj.optInt("minutoInicio", 0),
+                    horaFim = obj.optInt("horaFim", 23),
+                    minutoFim = obj.optInt("minutoFim", 59)
                 )
             )
         }
@@ -54,6 +59,11 @@ object LocationAlarmStorage {
             obj.put("longitude", it.longitude)
             obj.put("raioMetros", it.raioMetros)
             obj.put("ativo", it.ativo)
+            obj.put("modo", it.modo)
+            obj.put("horaInicio", it.horaInicio)
+            obj.put("minutoInicio", it.minutoInicio)
+            obj.put("horaFim", it.horaFim)
+            obj.put("minutoFim", it.minutoFim)
             array.put(obj)
         }
         context.getSharedPreferences(PREF, Context.MODE_PRIVATE)

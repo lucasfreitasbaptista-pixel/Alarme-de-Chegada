@@ -50,10 +50,17 @@ object AutoStartHelper {
         }
     }
 
-    fun tentarAbrirEconomiaBateriaMiui(context: Context) {
+    /**
+     * Tenta abrir a tela de economia de bateria específica do MIUI.
+     * Retorna true se conseguiu abrir essa tela (aparelho é Xiaomi/MIUI),
+     * ou false se o aparelho não tem essa tela (não é Xiaomi) — nesse caso,
+     * quem chamou essa função deve pedir a permissão padrão do Android no
+     * lugar, pra não deixar o usuário sem ser perguntado em nenhum aparelho.
+     */
+    fun tentarAbrirEconomiaBateriaMiui(context: Context): Boolean {
         val prefs = context.getSharedPreferences("alarme_chegada", Context.MODE_PRIVATE)
         val chave = "economia_bateria_miui_solicitada"
-        if (prefs.getBoolean(chave, false)) return
+        if (prefs.getBoolean(chave, false)) return false
         prefs.edit().putBoolean(chave, true).apply()
 
         try {
@@ -73,8 +80,10 @@ object AutoStartHelper {
                     Toast.LENGTH_LONG
                 ).show()
                 context.startActivity(intent)
+                return true
             }
         } catch (e: Exception) {
         }
+        return false
     }
 }

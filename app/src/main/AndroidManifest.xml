@@ -18,7 +18,11 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <!--
+        Não usa SCHEDULE_EXACT_ALARM: esse app não agenda nada por horário
+        (AlarmManager) — o alarme é disparado só por localização (geofencing).
+        A permissão de alarme exato não tem função aqui e foi removida.
+    -->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
@@ -49,7 +53,6 @@
             android:name=".MapPickerActivity"
             android:exported="false" />
 
-        <!-- Tela do alarme disparando - mesma estratégia de tela cheia do Super Despertador -->
         <activity
             android:name=".LocationAlarmActivity"
             android:exported="false"

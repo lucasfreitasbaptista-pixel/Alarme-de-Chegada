@@ -32,6 +32,13 @@
             android:textColor="#AAAAAA"
             android:textSize="13sp" />
 
+        <TextView
+            android:id="@+id/txtHorario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#888888"
+            android:textSize="12sp" />
+
     </LinearLayout>
 
     <Switch
