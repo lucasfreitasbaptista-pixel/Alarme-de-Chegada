@@ -1,0 +1,12 @@
+<resources>
+    <style name="Theme.AlarmeChegada" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/azul_localizacao</item>
+        <item name="android:windowBackground">@color/bg_dark</item>
+    </style>
+
+    <style name="Theme.AlarmeChegada.Alarm" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/azul_localizacao</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>

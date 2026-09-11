@@ -1,0 +1,44 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android' version '1.9.24'
+}
+
+android {
+    namespace 'com.alarmedechegada.app'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.alarmedechegada.app"
+        minSdk 26
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+
+    // Geofencing (monitorar chegada num local) - parte do Play Services,
+    // não precisa de chave de API nem cobrança
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
+
+    // Mapa para escolher o local no mapa - OpenStreetMap, gratuito, sem chave de API
+    implementation 'org.osmdroid:osmdroid-android:6.1.20'
+}

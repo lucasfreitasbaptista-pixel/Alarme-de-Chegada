@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--
+        ACCESS_BACKGROUND_LOCATION: essencial para esse app, já que o alarme
+        precisa disparar mesmo com o app fechado/em segundo plano (ex: usuário
+        dormindo no ônibus). No Android 10+, sem essa permissão o geofence só
+        funciona com o app aberto na tela.
+
+        IMPORTANTE PARA A PLAY STORE: essa é uma permissão "sensível", com
+        revisão extra da Google. Vai ser pedida numa TELA SEPARADA do sistema
+        (não dá pra pedir junto com as outras), e o Google costuma exigir um
+        vídeo curto mostrando o uso real dela na hora de publicar o app.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Alarme de Chegada"
+        android:theme="@style/Theme.AlarmeChegada"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MapPickerActivity"
+            android:exported="false" />
+
+        <!-- Tela do alarme disparando - mesma estratégia de tela cheia do Super Despertador -->
+        <activity
+            android:name=".LocationAlarmActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AlarmeChegada.Alarm" />
+
+        <service
+            android:name=".LocationAlarmService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="alarm-clock" />
+        </service>
+
+        <receiver android:name=".GeofenceBroadcastReceiver" android:exported="true" />
+
+        <receiver android:name=".BootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>
